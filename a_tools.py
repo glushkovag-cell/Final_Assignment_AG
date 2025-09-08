@@ -10,4 +10,4 @@ image_generation_tool = Tool.from_space(
     description="Generate an image from a prompt"
 )
 
-search_tool = Tool.from_langchain(load_tools(["serpapi"]))
+search_tool = Tool.from_langchain(load_tools(["serpapi"])[0])
