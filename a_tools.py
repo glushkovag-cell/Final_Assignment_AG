@@ -1,5 +1,6 @@
 import os
 from smolagents import Tool
+from langchain_community.agent_toolkits.load_tools import load_tools
 
 os.environ["SERPAPI_API_KEY"] = "06da1dedae2ed008f4d95e857c123fb1a3a6b20abd3a88de357d37a586fb70f3"
 
