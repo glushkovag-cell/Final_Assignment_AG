@@ -1,4 +1,5 @@
 langchain-community
+google-search-results
 pandas
 langchain
 smolagents
