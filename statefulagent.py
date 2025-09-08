@@ -2,17 +2,6 @@ import os
 from smolagents import CodeAgent, InferenceClientModel
 from a_tools import search_tool, final_answer, image_generation_tool
 
-extra_instructions = """
-
-For your final answer, always use:
-final_answer(<answer>)
-Do NOT include any HTML tags. Return only Python code in your final output.
-
-Example:
-city_name = "St. Petersburg"
-final_answer(city_name)
-"""
-
 class AG_Agent:
     def __init__(self):
         a_model = InferenceClientModel(
@@ -22,7 +11,12 @@ class AG_Agent:
         )
         self.model = a_model
         self.tools = [search_tool, final_answer, image_generation_tool]
-        self.agent = CodeAgent(tools=self.tools, model=self.model, stream_outputs=True, instructions=extra_instructions)
+        self.agent = CodeAgent(tools=self.tools,
+                               model=self.model,
+                               stream_outputs=True,
+                               code_block_tags="markdown",
+                               additional_authorized_imports=['requests', 'bs4','pandas','numpy',
+                                                              'json','datetime','geopandas','shapely'])
         self.context = []
         self.max_context_len = 20
         self.max_steps = 15
