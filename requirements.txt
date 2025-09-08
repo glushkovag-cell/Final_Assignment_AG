@@ -5,3 +5,6 @@ langchain
 smolagents
 gradio
 requests
+geopandas
+shapely
+bs4
