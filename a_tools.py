@@ -11,4 +11,3 @@ image_generation_tool = Tool.from_space(
 )
 
 search_tool = load_tools(["serpapi"])[0]
-

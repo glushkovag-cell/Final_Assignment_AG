@@ -20,7 +20,7 @@ class AGAgent(CodeAgent):
             temperature=0.7
         )
         super().__init__([search_tool,image_generation_tool], model = a_model, name="Andrey Agent", **kwargs)
-        print("AG Agent initialized.")
+        print("Andrey Agent initialized.")
 
 
 def run_and_submit_all( profile: gr.OAuthProfile | None):
