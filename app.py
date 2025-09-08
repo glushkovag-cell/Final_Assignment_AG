@@ -17,7 +17,8 @@ class AGAgent(CodeAgent):
         a_model = InferenceClientModel(
             model_id='Qwen/Qwen2.5-Coder-32B-Instruct',
             max_tokens=1024,
-            temperature=0.71
+            temperature=0.71,
+            api_key=os.environ.get("HF_API_KEY"),
         )
         super().__init__([image_generation_tool, search_tool], model = a_model, name="Andrey", **kwargs)
         print("Andrey Agent initialized.")
