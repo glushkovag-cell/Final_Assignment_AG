@@ -19,7 +19,7 @@ class AGAgent(CodeAgent):
             max_tokens=1024,
             temperature=0.7
         )
-        super().__init__([search_tool], model = a_model, name="Andrey", **kwargs)
+        super().__init__([image_generation_tool], model = a_model, name="Andrey", **kwargs)
         print("Andrey Agent initialized.")
 
 
