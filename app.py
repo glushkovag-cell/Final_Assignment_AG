@@ -1,10 +1,8 @@
 import os
 import gradio as gr
 import requests
-import inspect
 import pandas as pd
-from smolagents import CodeAgent, InferenceClientModel
-from a_tools import search_tool, image_generation_tool
+from statefulagent import AG_Agent
 
 # (Keep Constants as is)
 # --- Constants ---
@@ -12,17 +10,6 @@ DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
 
 # --- Basic Agent Definition ---
 # ----- THIS IS WhERE YOU CAN BUILD WHAT YOU WANT ------
-class AGAgent(CodeAgent):
-    def __init__(self, **kwargs):
-        a_model = InferenceClientModel(
-            model_id='Qwen/Qwen2.5-Coder-32B-Instruct',
-            max_tokens=1024,
-            temperature=0.71,
-            api_key=os.environ.get("HF_API_KEY"),
-        )
-        super().__init__([image_generation_tool, search_tool], model = a_model, name="Andrey", **kwargs)
-        print("Andrey Agent initialized.")
-
 
 def run_and_submit_all( profile: gr.OAuthProfile | None):
     """
@@ -45,7 +32,7 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
 
     # 1. Instantiate Agent ( modify this part to create your agent)
     try:
-        agent = AGAgent()
+        agent = AG_Agent()
     except Exception as e:
         print(f"Error instantiating agent: {e}")
         return f"Error initializing agent: {e}", None
@@ -85,7 +72,7 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
             print(f"Skipping item with missing task_id or question: {item}")
             continue
         try:
-            submitted_answer = "default" # agent.run(question_text)
+            submitted_answer = agent.ask(question_text)
             answers_payload.append({"task_id": task_id, "submitted_answer": submitted_answer})
             results_log.append({"Task ID": task_id, "Question": question_text, "Submitted Answer": submitted_answer})
         except Exception as e:
