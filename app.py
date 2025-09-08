@@ -3,21 +3,25 @@ import gradio as gr
 import requests
 import inspect
 import pandas as pd
+from smolagents import CodeAgent, InferenceClientModel
+from a_tools import search_tool, image_generation_tool
 
 # (Keep Constants as is)
 # --- Constants ---
 DEFAULT_API_URL = "https://agents-course-unit4-scoring.hf.space"
 
 # --- Basic Agent Definition ---
-# ----- THIS IS WERE YOU CAN BUILD WHAT YOU WANT ------
-class BasicAgent:
-    def __init__(self):
+# ----- THIS IS WhERE YOU CAN BUILD WHAT YOU WANT ------
+class AGAgent(CodeAgent):
+    def __init__(self, **kwargs):
+        a_model = InferenceClientModel(
+            model_id='Qwen/Qwen2.5-Coder-32B-Instruct',
+            max_tokens=1024,
+            temperature=0.7
+        )
+        super().__init__([search_tool,image_generation_tool], model = a_model, name="Andrey Agent", **kwargs)
         print("AG Agent initialized.")
-    def __call__(self, question: str) -> str:
-        print(f"Agent received question (first 50 chars): {question[:50]}...")
-        fixed_answer = "This is a default answer."
-        print(f"Agent returning fixed answer: {fixed_answer}")
-        return fixed_answer
+
 
 def run_and_submit_all( profile: gr.OAuthProfile | None):
     """
@@ -40,11 +44,12 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
 
     # 1. Instantiate Agent ( modify this part to create your agent)
     try:
-        agent = BasicAgent()
+        agent = AGAgent(
+            tools=[search_tool],)
     except Exception as e:
         print(f"Error instantiating agent: {e}")
         return f"Error initializing agent: {e}", None
-    # In the case of an app running as a hugging Face space, this link points toward your codebase ( usefull for others so please keep it public)
+    # In the case of an app running as a hugging Face space, this link points toward your codebase ( useful for others so please keep it public)
     agent_code = f"https://huggingface.co/spaces/{space_id}/tree/main"
     print(agent_code)
 
@@ -154,7 +159,7 @@ with gr.Blocks() as demo:
         ---
         **Disclaimers:**
         Once clicking on the "submit button, it can take quite some time ( this is the time for the agent to go through all the questions).
-        This space provides a basic setup and is intentionally sub-optimal to encourage you to develop your own, more robust solution. For instance for the delay process of the submit button, a solution could be to cache the answers and submit in a seperate action or even to answer the questions in async.
+        This space provides a basic setup and is intentionally sub-optimal to encourage you to develop your own, more robust solution. For instance for the delay process of the submit button, a solution could be to cache the answers and submit in a separate action or even to answer the questions in async.
         """
     )
 
