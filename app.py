@@ -33,7 +33,7 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
     # 1. Instantiate Agent ( modify this part to create your agent)
     try:
         agent = StatefulAgent(model_id='meta-llama/Llama-3.3-70B-Instruct')
- №       agent = StatefulAgent()
+#      agent = StatefulAgent()
     except Exception as e:
         print(f"Error instantiating agent: {e}")
         return f"Error initializing agent: {e}", None
