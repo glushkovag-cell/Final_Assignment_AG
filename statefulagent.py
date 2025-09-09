@@ -3,7 +3,7 @@ from smolagents import CodeAgent, InferenceClientModel
 from a_tools import search_tool, final_answer, image_generation_tool
 
 class StatefulAgent:
-    def __init__(self, model_id = 'Qwen/Qwen2.5-Coder-32B-Instruct', context_len = 0):
+    def __init__(self, model_id = 'Qwen/Qwen2.5-Coder-32B-Instruct', context_len = 0, structured_code = False):
         a_model = InferenceClientModel(
             model_id=model_id,
             max_tokens=1024,
@@ -15,7 +15,7 @@ class StatefulAgent:
                                model=self.model,
                                stream_outputs=True,
                                code_block_tags="markdown",
-                               use_structured_outputs_internally=True,
+                               use_structured_outputs_internally=structured_code,
                                additional_authorized_imports=['requests', 'bs4','pandas','numpy',
                                                               'json','datetime','geopandas','shapely'])
         self.context = []
