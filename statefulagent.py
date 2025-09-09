@@ -2,10 +2,10 @@ import os
 from smolagents import CodeAgent, InferenceClientModel
 from a_tools import search_tool, final_answer, image_generation_tool
 
-class AG_Agent:
-    def __init__(self):
+class StatefulAgent:
+    def __init__(self, model_id = 'Qwen/Qwen2.5-Coder-32B-Instruct', context_len = 0):
         a_model = InferenceClientModel(
-            model_id='meta-llama/Llama-3.3-70B-Instruct',
+            model_id=model_id,
             max_tokens=1024,
             api_key=os.environ.get("HF_API_KEY"),
         )
@@ -15,29 +15,32 @@ class AG_Agent:
                                model=self.model,
                                stream_outputs=True,
                                code_block_tags="markdown",
+                               use_structured_outputs_internally=True,
                                additional_authorized_imports=['requests', 'bs4','pandas','numpy',
                                                               'json','datetime','geopandas','shapely'])
         self.context = []
-        self.max_context_len = 20
-        self.max_steps = 15
+        self.max_context_len = context_len
+        self.max_steps = 20
 
     def ask(self, question):
         # Refresh context and add it to prompt
         self.context.append({"role": "user", "content": question})
         if len(self.context) > self.max_context_len:
             self.context = self.context[-self.max_context_len:]
-        # Combine story for prompt (optional)
+        # Combine history for prompt (optional)
         prompt = ""
         for msg in self.context:
             if msg["role"] == "user":
                 prompt += f"User: {msg['content']}\n"
             else:
                 prompt += f"Agent: {msg['content']}\n"
-        prompt += f"User: {question}\nAgent:"
+        if self.max_steps > 0:
+            prompt += f"User: {question}\nAgent:"
         # Run agent with created prompt
         response = self.agent.run(prompt, max_steps=self.max_steps)
         # Add answer to history for context
-        self.context.append({"role": "assistant", "content": response})
+        if self.max_steps > 0:
+            self.context.append({"role": "assistant", "content": response})
         if len(self.context) > self.max_context_len:
             self.context = self.context[-self.max_context_len:]
         return response

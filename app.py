@@ -2,7 +2,7 @@ import os
 import gradio as gr
 import requests
 import pandas as pd
-from statefulagent import AG_Agent
+from statefulagent import StatefulAgent
 
 # (Keep Constants as is)
 # --- Constants ---
@@ -32,7 +32,8 @@ def run_and_submit_all( profile: gr.OAuthProfile | None):
 
     # 1. Instantiate Agent ( modify this part to create your agent)
     try:
-        agent = AG_Agent()
+ #       agent = StatefulAgent('meta-llama/Llama-3.3-70B-Instruct')
+        agent = StatefulAgent()
     except Exception as e:
         print(f"Error instantiating agent: {e}")
         return f"Error initializing agent: {e}", None
