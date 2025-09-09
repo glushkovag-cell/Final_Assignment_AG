@@ -1,5 +1,4 @@
-from smolagents import Tool, FinalAnswerTool
-from langchain_community.agent_toolkits.load_tools import load_tools
+from smolagents import Tool, FinalAnswerTool, WebSearchTool
 
 image_generation_tool = Tool.from_space(
     "black-forest-labs/FLUX.1-schnell",
@@ -7,6 +6,6 @@ image_generation_tool = Tool.from_space(
     description="Generate an image from a prompt"
 )
 
-search_tool = Tool.from_langchain(load_tools(["serpapi"])[0])
+search_tool = WebSearchTool()
 
 final_answer = FinalAnswerTool()
