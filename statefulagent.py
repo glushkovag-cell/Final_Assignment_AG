@@ -17,7 +17,7 @@ class StatefulAgent:
                                code_block_tags="markdown",
                                use_structured_outputs_internally=structured_code,
                                additional_authorized_imports=['requests', 'bs4','pandas','numpy',
-                                                              'json','datetime','geopandas','shapely'])
+                                                              'json','datetime','geopandas'])
         self.context = []
         self.max_context_len = context_len
         self.max_steps = 20
