@@ -20,7 +20,7 @@ class StatefulAgent:
                                                               'json','datetime','geopandas'])
         self.context = []
         self.max_context_len = context_len
-        self.max_steps = 20
+        self.max_steps = 15
 
     def ask(self, question):
         # Refresh context and add it to prompt
